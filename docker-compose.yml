@@ -1,0 +1,20 @@
+services:
+  db:  
+    image: postgres:15
+    container_name: recruitment_dw
+    hostname: db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_INITDB_ARGS: "--auth-host=md5 --auth-local=md5"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./sql:/docker-entrypoint-initdb.d
+    command: ["postgres", "-c", "password_encryption=md5"]
+
+volumes:
+  postgres_data:
